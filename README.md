@@ -3,9 +3,11 @@
 
 ## Overview
 
-Sylva = Latin for *wood, **forest**, or woodland.*
-Sense = We're sensing that ***sylva.***
-NRT = Near-real-time.
+Sylva = Latin for *wood, **forest**, or woodland*
+
+Sense = We're sensing that ***sylva***
+
+NRT = Near-real-time
 
 SylvaSense NRT is designed to be an automated monitoring system to detect forest loss and potentially illegal logging activities. Using ***Sentinel-2*** satellite imagery, ***U-Net*** deep learning architecture, and Google Earth Engine (GEE), the system can accurately identify environmental degradation patterns in near-real-time. 
 
