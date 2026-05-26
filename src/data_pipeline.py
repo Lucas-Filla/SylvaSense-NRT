@@ -19,7 +19,7 @@ def fetch(aoi, start, end):
                   .filterBounds(aoi)
                   .filterDate(start, end)
                   .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10))
-                #   .map(water_mask)
+                  .map(water_mask)
                   .map(add_ndvi))
     
     # Returns most recent median to reduce overall noise
