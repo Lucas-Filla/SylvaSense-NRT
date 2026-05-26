@@ -26,10 +26,3 @@ Sustainability is a very important practice to me, and illegal logging / defores
 - **Geospatial:** Geemap, Rasterio, NumPy
 - **Dashboard:** Streamlit
 
-## Roadmap
-- [ ] GEE Environment Setup & Data Pipeline
-- [ ] Multi-Spectral Feature Engineering (NDVI/NIR)
-- [ ] U-Net Model Architecture & Training
-- [ ] Change Detection Logic Implementation
-- [ ] Live Dashboard Deployment
-
