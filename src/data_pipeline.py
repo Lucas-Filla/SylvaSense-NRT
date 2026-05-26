@@ -19,19 +19,19 @@ def fetch(aoi, start, end):
                   .filterBounds(aoi)
                   .filterDate(start, end)
                   .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10))
-                  .map(water_mask)
+                #   .map(water_mask) #Retired this function because it wasn't working as well as I'd like, and I'd rather have the AI learn not to count the giant red splotches of water
                   .map(add_ndvi))
     
     # Returns most recent median to reduce overall noise
     return collection.median().clip(aoi)
 
 #Without this function water would be a dark red
-def water_mask(image):
-    #Calculate MNDWI (modified normalized difference water index) using B3 (green) and B11 (SWIR)
-    ndwi = image.normalizedDifference(['B3', 'B11']).rename('NDWI')
-    #Binary mask of land vs water
-    land_only = ndwi.lt(0.0)
-    return image.updateMask(land_only)
+# def water_mask(image):
+    # #Calculate MNDWI (modified normalized difference water index) using B3 (green) and B11 (SWIR)
+    # ndwi = image.normalizedDifference(['B3', 'B11']).rename('NDWI')
+    # #Binary mask of land vs water
+    # land_only = ndwi.lt(0.0)
+    # return image.updateMask(land_only)
 
 if __name__ == "__main__":
     load_dotenv()
