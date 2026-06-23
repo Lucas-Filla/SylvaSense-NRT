@@ -13,6 +13,13 @@ def add_ndvi(image):
     ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI')
     return image.addBands(ndvi)
 
+def get_labels(aoi):
+    #calling the hansen dataset from the ee catalog
+    hansen = ee.Image("UMD/hansen/global_forest_change_2023_v1_11")
+    #loss band is pre calculated array: 1 = deforested 0 = background
+    label_mask = hansen.select('loss').clip(aoi)
+    return label_mask.rename('TARGET')
+
 # Fetches the sentinel data
 def fetch(aoi, start, end):
     collection = (ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
