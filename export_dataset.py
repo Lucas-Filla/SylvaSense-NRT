@@ -12,11 +12,11 @@ def export_training_patch():
     #Porto velho cords (where the hansen dataset is)
     aoi = get_aoi(-63.9, -8.76, 10)
     #Sentinel-2 data from 2023 to match hansen data from 2023
-    features = fetch(aoi, '2023-01-01', '2023-12-31')
+    features = fetch(aoi, '2025-01-01', '2025-12-31')
     labels = get_labels(aoi)
 
     selected_features = features.select(['B2', 'B3', 'B4', 'B8', 'B11', 'NDVI'])
-    training_tensor = selected_features.addBands(labels)
+    training_tensor = selected_features.addBands(labels).toFloat() #added toFloat so data types are consistent
 
     print("Building GeoTIFF...")
     task = ee.batch.Export.image.toDrive( # type: ignore

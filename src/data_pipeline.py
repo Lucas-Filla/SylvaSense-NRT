@@ -15,7 +15,7 @@ def add_ndvi(image):
 
 def get_labels(aoi):
     #calling the hansen dataset from the ee catalog
-    hansen = ee.Image("UMD/hansen/global_forest_change_2023_v1_11")
+    hansen = ee.Image("UMD/hansen/global_forest_change_2025_v1_13")
     #loss band is pre calculated array: 1 = deforested 0 = background
     label_mask = hansen.select('loss').clip(aoi)
     return label_mask.rename('TARGET')
