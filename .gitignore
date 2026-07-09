@@ -1,0 +1,19 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data (Large Satellite Files)
+data/
+*.tif
+*.tiff
+
+# GEE Credentials
+.credentials/
+.env
