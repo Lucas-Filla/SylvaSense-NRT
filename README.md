@@ -26,3 +26,8 @@ Sustainability is a very important practice to me, and illegal logging / defores
 - **Geospatial:** Geemap, Rasterio, NumPy
 - **Dashboard:** Streamlit
 
+## Resources that helped me
+
+https://www.geeksforgeeks.org/machine-learning/u-net-architecture-explained/
+https://earthengine.google.com/
+https://developers.google.com/earth-engine/datasets/catalog/UMD_hansen_global_forest_change_2025_v1_13
