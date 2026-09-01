@@ -76,7 +76,7 @@ class UNet(nn.Module):
 
         #output mapping
         logits = self.outc(c4) #flattens 64 channels -> 1 w raw prediction numbers
-        return torch.sigmoid(logits) #brings prediction numbers to be in between 0-1
+        return logits
 
 if __name__ == "__main__":
     model = UNet(in_channels=6, out_channels=1)

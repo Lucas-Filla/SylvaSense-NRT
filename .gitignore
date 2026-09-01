@@ -13,6 +13,10 @@ __pycache__/
 data/
 *.tif
 *.tiff
+results/
+
+#PyTorch model weights
+*.pth
 
 # GEE Credentials
 .credentials/
