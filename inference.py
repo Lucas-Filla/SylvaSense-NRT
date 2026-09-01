@@ -59,4 +59,4 @@ if __name__ == "__main__":
     plt.tight_layout()
     #Save directly to hard drive
     plt.savefig("results/inference_result.png")
-    print("Visualization saced to inference_result.png")
+    print("Visualization saced to results/inference_result.png")
