@@ -1,7 +1,6 @@
 import ee
 import os
 import requests
-import zipfile
 import io
 import rasterio
 from dotenv import load_dotenv
@@ -63,15 +62,17 @@ def download_patch(image, aoi):
     })
 
     response = requests.get(download_url)
-    #check if zip file
-    if response.status_code != 200 or not response.content.startswith(b'PK'):
+
+    #check if valid
+    if response.status_code != 200:
         print(f"Error from GEE server (Status {response.status_code}):")
         print(response.text[:500]) #first 500 char of error message
         raise RuntimeError("EE failed to generate valid GeoTIFF download.")
         
-    with zipfile.ZipFile(io.BytesIO(response.content)) as z:
-        tif_filename = z.namelist()[0]
-        z.extract(tif_filename, ".")
+    #GEE returns raw GeoTIFF directly, save it to disk
+    tif_filename = "temp_patch.tif"
+    with open(tif_filename, "wb") as f:
+        f.write(response.content)
 
     with rasterio.open(tif_filename) as src:
         array3d = src.read()
