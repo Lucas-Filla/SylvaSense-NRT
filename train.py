@@ -28,19 +28,25 @@ def load_data(batch_size=16):
 
 
 if __name__ == "__main__":
-    train_loader = load_data(batch_size=16)
+    #Switch to gpu if available
+    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+    print(f"Training on device: {device}")
 
-    model = UNet(in_channels=6, out_channels=1)
+    train_loader = load_data()
+
+    model = UNet(in_channels=6, out_channels=1).to(device)
     criterion = nn.BCEWithLogitsLoss() #Loss function
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    epochs = 5
-    print("\nTraining loop go")
+    epochs = 50
+    print("\nTraining loop go!")
     for epoch in range(epochs):
         #Will track total loss for a later avg
         epoch_loss = 0.0
 
         for batch_idx, (X_batch, y_batch) in enumerate(train_loader):
+            X_batch = X_batch.to(device)
+            y_batch = y_batch.to(device)
             #clear old gradients
             optimizer.zero_grad()
             predictions = model(X_batch)
@@ -53,6 +59,7 @@ if __name__ == "__main__":
         #Prints out avg loss for each epoch, showing whether the training is working
         print(f"Epoch [{epoch+1}/{epochs}] | Average Loss: {avg_loss:.4f}")
 
-
-    print("\nDataLoader, U-Net, and diagnostics linked!")
+    print("\nTraining complete!")
+    torch.save(model.state_dict(), "unet_weights.pth")
+    print("Model weights saved to unet_weights.pth")
     

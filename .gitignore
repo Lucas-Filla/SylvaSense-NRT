@@ -14,6 +14,9 @@ data/
 *.tif
 *.tiff
 
+#PyTorch model weights
+*.pth
+
 # GEE Credentials
 .credentials/
 .env
