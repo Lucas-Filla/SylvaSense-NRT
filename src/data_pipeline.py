@@ -63,6 +63,12 @@ def download_patch(image, aoi):
     })
 
     response = requests.get(download_url)
+    #check if zip file
+    if response.status_code != 200 or not response.content.startswith(b'PK'):
+        print(f"Error from GEE server (Status {response.status_code}):")
+        print(response.text[:500]) #first 500 char of error message
+        raise RuntimeError("EE failed to generate valid GeoTIFF download.")
+        
     with zipfile.ZipFile(io.BytesIO(response.content)) as z:
         tif_filename = z.namelist()[0]
         z.extract(tif_filename, ".")
