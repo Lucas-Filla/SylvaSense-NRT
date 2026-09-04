@@ -37,8 +37,8 @@ if __name__ == "__main__":
     model = UNet(in_channels=6, out_channels=1).to(device)
 
     #Penalizes heavy for mistaking deforestation as healthy
-    weight = torch.tensor([10.0]).to(device)
-    criterion = nn.BCEWithLogitsLoss(pos_weight=weight) #Loss function  
+    # weight = torch.tensor([10.0]).to(device)
+    criterion = nn.BCEWithLogitsLoss() #Loss function  pos_weight=weight
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     #Monitors loss to 'schedule' a change in lr
