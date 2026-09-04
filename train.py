@@ -35,10 +35,16 @@ if __name__ == "__main__":
     train_loader = load_data()
 
     model = UNet(in_channels=6, out_channels=1).to(device)
-    criterion = nn.BCEWithLogitsLoss() #Loss function
+
+    #Penalizes heavy for mistaking deforestation as healthy
+    weight = torch.tensor([10.0]).to(device)
+    criterion = nn.BCEWithLogitsLoss(pos_weight=weight) #Loss function  
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    epochs = 50
+    #Monitors loss to 'schedule' a change in lr
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=5, factor=0.5)
+
+    epochs = 150
     print("\nTraining loop go!")
     for epoch in range(epochs):
         #Will track total loss for a later avg
@@ -56,8 +62,12 @@ if __name__ == "__main__":
             epoch_loss += loss.item()
 
         avg_loss = epoch_loss / len(train_loader)
+        #Scheduler steps using average loss of each batch
+        scheduler.step(avg_loss)
+        #extract learning rate
+        current_lr = optimizer.param_groups[0]['lr']
         #Prints out avg loss for each epoch, showing whether the training is working
-        print(f"Epoch [{epoch+1}/{epochs}] | Average Loss: {avg_loss:.4f}")
+        print(f"Epoch [{epoch+1}/{epochs}] | Average Loss: {avg_loss:.4f} | LR: {current_lr:.6f}")
 
     print("\nTraining complete!")
     torch.save(model.state_dict(), "weights/unet_production_weights.pth")
