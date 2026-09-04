@@ -60,6 +60,6 @@ if __name__ == "__main__":
         print(f"Epoch [{epoch+1}/{epochs}] | Average Loss: {avg_loss:.4f}")
 
     print("\nTraining complete!")
-    torch.save(model.state_dict(), "unet_gee_test.pth")
-    print("Model weights saved to unet_gee_test.pth")
+    torch.save(model.state_dict(), "weights/unet_gee_test.pth")
+    print("Model weights saved to weights/unet_gee_test.pth")
     
