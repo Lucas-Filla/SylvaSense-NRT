@@ -26,28 +26,45 @@ if __name__ == "__main__":
     load_dotenv()
     project_id = os.getenv("EE_PROJECT_ID")
     ee.Initialize(project=project_id)
-    #Using 4.5km buffer to cut into dozens of clean patches
-    #changed from 10 to 4.5 due to request size limits -> will have to write a wrapper loop to query multiple coordinates at 4.5km each
-    aoi = get_aoi(-63.90, -8.76, 4.5)
 
-    print("Fetching multi-spectral imagery and forest loss labels from GEE...")
-    raw_image = fetch(aoi, '2025-01-01', '2026-05-12')
-    formatted_image = prepare_image(raw_image, aoi)
-    label_image = get_labels(aoi)
+    #Coordinates for active deforestation zones in Brazil
+    hotspots = [
+        (-63.90, -8.76),
+        (-63.85, -8.80),
+        (-63.80, -8.85),
+        (-63.75, -8.90),
+        (-63.70, -8.95)
+    ]
 
-    print("Downloading regional image composite...")
-    image_array = download_patch(formatted_image, aoi)
+    all_X, all_y = [], []
 
-    print("Downloading regional label mask...")
-    label_array = download_patch(label_image, aoi)
+    #For all the hostpots!!
+    for lon, lat in hotspots:
+        print(f"Processing hostpot: {lon}, {lat}")
+        #Using 4.5km buffer to cut into dozens of clean patches
+        #changed from 10 to 4.5 due to request size limits -> will have to write a wrapper loop to query multiple coordinates at 4.5km each
+        aoi = get_aoi(lon, lat, 4.5)
 
-    print("SLICING!!")
-    X_patches, y_patches = slice_into_patches(image_array, label_array)
-    print(f"Generated {X_patches.shape[0]} new training patches")
+        raw_image = fetch(aoi, '2025-01-01', '2026-05-12')
+        formatted_image = prepare_image(raw_image, aoi)
+        label_image = get_labels(aoi)
+
+        image_array = download_patch(formatted_image, aoi)
+        label_array = download_patch(label_image, aoi)
+
+        X_patches, y_patches = slice_into_patches(image_array, label_array)
+
+        all_X.append(X_patches)
+        all_y.append(y_patches)
+
+    final_X = np.vstack(all_X)
+    final_y = np.vstack(all_y)
+
+    print(f"Generated {final_X.shape[0]} training patches")
 
     os.makedirs("data", exist_ok=True)
-    np.save("data/X_gee_train.npy", X_patches)
-    np.save("data/y_gee_train.npy", y_patches)
+    np.save("data/X_gee_train.npy", final_X)
+    np.save("data/y_gee_train.npy", final_y)
     print("Saved to data/X_gee_train.npy and data/y_gee_train.npy")
 
 
