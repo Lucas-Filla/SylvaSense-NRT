@@ -7,12 +7,12 @@ from torch.utils.data import DataLoader, TensorDataset
 #Imports UNet architecture from /src/
 from src.models.unet import UNet
 
-def load_data(batch_size=16):
+def load_data(batch_size=3):
     print("Loading data...")
 
     #Loads the NumPy arrays from data
-    X_train = np.load('data/X_train.npy')
-    y_train = np.load('data/y_train.npy')
+    X_train = np.load('data/X_gee_train.npy')
+    y_train = np.load('data/y_gee_train.npy')
 
     #Converts raw NumPy arrays into PyTorch Tensors (FLoat32 is used for weights)
     X_tensor = torch.tensor(X_train, dtype=torch.float32)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     criterion = nn.BCEWithLogitsLoss() #Loss function
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    epochs = 50
+    epochs = 3
     print("\nTraining loop go!")
     for epoch in range(epochs):
         #Will track total loss for a later avg
@@ -60,6 +60,6 @@ if __name__ == "__main__":
         print(f"Epoch [{epoch+1}/{epochs}] | Average Loss: {avg_loss:.4f}")
 
     print("\nTraining complete!")
-    torch.save(model.state_dict(), "unet_weights.pth")
-    print("Model weights saved to unet_weights.pth")
+    torch.save(model.state_dict(), "unet_gee_test.pth")
+    print("Model weights saved to unet_gee_test.pth")
     
