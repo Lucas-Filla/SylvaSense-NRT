@@ -11,14 +11,14 @@ if __name__ == "__main__":
 
     model = UNet(in_channels=6, out_channels=1).to(device)
     #load weights from trained models
-    model.load_state_dict(torch.load("unet_weights.pth", weights_only=True))
+    model.load_state_dict(torch.load("weights/unet_production_weights.pth", weights_only=True))
     #locks model for testing
     model.eval()
 
     print("\nLoading test sample...")
     #Load first 6-channel image and corresponsding ground truth
-    X_sample = np.load('data/X_train.npy')[0]
-    y_sample = np.load('data/y_train.npy')[0]
+    X_sample = np.load('data/X_gee_train.npy')[0]
+    y_sample = np.load('data/y_gee_train.npy')[0]
     #Conver to PyTorch tensor
     #Unsqueeze fakes a batch size of 1, turning shape (6, 256, 256) into (1, 6, 256, 256)
     X_tensor = torch.tensor(X_sample, dtype=torch.float32).unsqueeze(0).to(device)
@@ -59,4 +59,4 @@ if __name__ == "__main__":
     plt.tight_layout()
     #Save directly to hard drive
     plt.savefig("results/inference_result.png")
-    print("Visualization saced to results/inference_result.png")
+    print("Visualization saved to results/inference_result.png")
